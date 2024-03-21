@@ -1,0 +1,6 @@
+@NLP_Delivery_WebApplication_HostAddress = http://localhost:5115
+
+GET {{NLP_Delivery_WebApplication_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
