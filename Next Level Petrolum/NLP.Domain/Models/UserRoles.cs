@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace NLP.Domain.Models
 {
-    public class Brands
+    public class UserRoles
     {
         [Key]
-        public int BrandID { get; set; }
-        public string BrandName { get; set; }
-        public Byte[] BrandImage { get; set; }
+        public int RoleID { get; set; }
+
+        public string RoleName { get; set; }
     }
 }

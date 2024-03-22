@@ -1,9 +1,15 @@
-using FluentAssertions.Common;
+using Microsoft.EntityFrameworkCore;
+using NLP.Dal;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-services.addDbContext();
+
+//Connection String
+var cs = builder.Configuration.GetConnectionString("Default");
+
+//DBContext 
+builder.Services.AddDbContext<DataContext>(options => { options.UseSqlServer("cs"); });
 
 builder.Services.AddControllers();
 

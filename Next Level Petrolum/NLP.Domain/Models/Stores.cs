@@ -10,6 +10,7 @@ namespace NLP.Domain.Models
 {
     public class Stores
     {
+        [Key]
         public int StoreID { get; set; }
 
         public string StoreName { get; set; }
