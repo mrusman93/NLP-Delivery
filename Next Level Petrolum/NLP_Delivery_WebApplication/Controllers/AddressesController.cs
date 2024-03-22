@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLP.Dal;
 using NLP.Domain.Models;
+using NLP_Delivery_WebApplication.DTOS.Addresses;
 
 namespace NLP_Delivery_WebApplication.Controllers
 {
@@ -11,11 +13,13 @@ namespace NLP_Delivery_WebApplication.Controllers
     public class AddressesController : ControllerBase
     {
         private readonly DataContext _dataContext;
+        private readonly IMapper _mapper;
         public AddressesController(/*<addressesController> logger,*/DataContext
-            dataContext)
+            dataContext, IMapper mapper)
         {
             //_logger = logger;
             _dataContext = dataContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -33,12 +37,16 @@ namespace NLP_Delivery_WebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAddress([FromBody] Addresses Address)
+        public async Task<IActionResult> CreateAddress([FromBody] DTOCreateAddresses Address)
         {
-            _dataContext.Address.Add(Address);
+            var domainAddress = _mapper.Map<Addresses>(Address);
+
+            _dataContext.Address.Add(domainAddress);
             await _dataContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetAddressById), new { id = Address.AddressID, Address });
+            var AddressGet = _mapper.Map<DTOGetAddresses>(domainAddress);
+
+            return CreatedAtAction(nameof(GetAddressById), new { id = domainAddress.AddressID }, AddressGet );
         }
 
         /*

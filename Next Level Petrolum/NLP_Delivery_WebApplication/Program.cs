@@ -10,12 +10,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 //DBContext 
 //builder.Services.AddDbContext<DataContext>(options => { options.UseSqlServer("cs"); });
+
+
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("Default")));
 
+builder.Services.AddAutoMapper(typeof(Program));
 
-
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
