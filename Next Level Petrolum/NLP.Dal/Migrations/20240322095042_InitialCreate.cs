@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -60,14 +59,14 @@ namespace NLP.Dal.Migrations
                     ReceiverID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ReceiverName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReceiverAddressAddressID = table.Column<int>(type: "int", nullable: false)
+                    AddressID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductReceiver", x => x.ReceiverID);
                     table.ForeignKey(
-                        name: "FK_ProductReceiver_Address_ReceiverAddressAddressID",
-                        column: x => x.ReceiverAddressAddressID,
+                        name: "FK_ProductReceiver_Address_AddressID",
+                        column: x => x.AddressID,
                         principalTable: "Address",
                         principalColumn: "AddressID",
                         onDelete: ReferentialAction.Cascade);
@@ -99,18 +98,18 @@ namespace NLP.Dal.Migrations
                 {
                     UserID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleID = table.Column<int>(type: "int", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmailID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.UserID);
                     table.ForeignKey(
-                        name: "FK_User_UsersRole_RoleID",
-                        column: x => x.RoleID,
+                        name: "FK_User_UsersRole_RoleId",
+                        column: x => x.RoleId,
                         principalTable: "UsersRole",
                         principalColumn: "RoleID",
                         onDelete: ReferentialAction.Cascade);
@@ -163,49 +162,6 @@ namespace NLP.Dal.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ProductDispensing",
-                columns: table => new
-                {
-                    DispensingID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    NumProducts = table.Column<int>(type: "int", nullable: false),
-                    SignatureImage = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    StoreID = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false),
-                    ReceiverID = table.Column<int>(type: "int", nullable: false),
-                    ProductID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductDispensing", x => x.DispensingID);
-                    table.ForeignKey(
-                        name: "FK_ProductDispensing_ProductReceiver_ReceiverID",
-                        column: x => x.ReceiverID,
-                        principalTable: "ProductReceiver",
-                        principalColumn: "ReceiverID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductDispensing_Product_ProductID",
-                        column: x => x.ProductID,
-                        principalTable: "Product",
-                        principalColumn: "ProductID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductDispensing_Store_StoreID",
-                        column: x => x.StoreID,
-                        principalTable: "Store",
-                        principalColumn: "StoreID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductDispensing_User_UserID",
-                        column: x => x.UserID,
-                        principalTable: "User",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Brand_StoresStoreID",
                 table: "Brand",
@@ -222,29 +178,9 @@ namespace NLP.Dal.Migrations
                 column: "SizeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductDispensing_ProductID",
-                table: "ProductDispensing",
-                column: "ProductID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductDispensing_ReceiverID",
-                table: "ProductDispensing",
-                column: "ReceiverID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductDispensing_StoreID",
-                table: "ProductDispensing",
-                column: "StoreID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductDispensing_UserID",
-                table: "ProductDispensing",
-                column: "UserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductReceiver_ReceiverAddressAddressID",
+                name: "IX_ProductReceiver_AddressID",
                 table: "ProductReceiver",
-                column: "ReceiverAddressAddressID");
+                column: "AddressID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Store_AddressID",
@@ -252,22 +188,19 @@ namespace NLP.Dal.Migrations
                 column: "AddressID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_RoleID",
+                name: "IX_User_RoleId",
                 table: "User",
-                column: "RoleID");
+                column: "RoleId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ProductDispensing");
+                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "ProductReceiver");
-
-            migrationBuilder.DropTable(
-                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "User");

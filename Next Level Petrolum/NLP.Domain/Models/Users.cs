@@ -14,8 +14,6 @@ namespace NLP.Domain.Models
         [Key]
         public int UserID { get; set; }
 
-        public int RoleID { get; set; }
-
         public string Username { get; set; }
 
         public string EmailID { get; set; }
@@ -23,7 +21,7 @@ namespace NLP.Domain.Models
         public string Password { get; set; }
 
         public string PhoneNumber { get; set; }
-
+        [ForeignKey("RoleId")]
         public UserRoles Role { get; set; }
     }
 }

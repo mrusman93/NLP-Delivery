@@ -77,49 +77,6 @@ namespace NLP.Dal.Migrations
                     b.ToTable("Brand");
                 });
 
-            modelBuilder.Entity("NLP.Domain.Models.ProductDispensing", b =>
-                {
-                    b.Property<int>("DispensingID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DispensingID"));
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("NumProducts")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReceiverID")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("SignatureImage")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<int>("StoreID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("DispensingID");
-
-                    b.HasIndex("ProductID");
-
-                    b.HasIndex("ReceiverID");
-
-                    b.HasIndex("StoreID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("ProductDispensing");
-                });
-
             modelBuilder.Entity("NLP.Domain.Models.ProductReceivers", b =>
                 {
                     b.Property<int>("ReceiverID")
@@ -128,7 +85,7 @@ namespace NLP.Dal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReceiverID"));
 
-                    b.Property<int>("ReceiverAddressAddressID")
+                    b.Property<int>("AddressID")
                         .HasColumnType("int");
 
                     b.Property<string>("ReceiverName")
@@ -137,7 +94,7 @@ namespace NLP.Dal.Migrations
 
                     b.HasKey("ReceiverID");
 
-                    b.HasIndex("ReceiverAddressAddressID");
+                    b.HasIndex("AddressID");
 
                     b.ToTable("ProductReceiver");
                 });
@@ -245,7 +202,7 @@ namespace NLP.Dal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleID")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("Username")
@@ -254,7 +211,7 @@ namespace NLP.Dal.Migrations
 
                     b.HasKey("UserID");
 
-                    b.HasIndex("RoleID");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("User");
                 });
@@ -266,46 +223,11 @@ namespace NLP.Dal.Migrations
                         .HasForeignKey("StoresStoreID");
                 });
 
-            modelBuilder.Entity("NLP.Domain.Models.ProductDispensing", b =>
-                {
-                    b.HasOne("NLP.Domain.Models.Products", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NLP.Domain.Models.ProductReceivers", "Receiver")
-                        .WithMany()
-                        .HasForeignKey("ReceiverID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NLP.Domain.Models.Stores", "Store")
-                        .WithMany()
-                        .HasForeignKey("StoreID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NLP.Domain.Models.Users", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Store");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("NLP.Domain.Models.ProductReceivers", b =>
                 {
                     b.HasOne("NLP.Domain.Models.Addresses", "ReceiverAddress")
                         .WithMany()
-                        .HasForeignKey("ReceiverAddressAddressID")
+                        .HasForeignKey("AddressID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -346,7 +268,7 @@ namespace NLP.Dal.Migrations
                 {
                     b.HasOne("NLP.Domain.Models.UserRoles", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleID")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

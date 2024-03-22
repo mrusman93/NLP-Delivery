@@ -15,7 +15,7 @@ namespace NLP.Domain.Models
         public int ReceiverID { get; set; }
 
         public string ReceiverName { get; set; }
-
+        [ForeignKey("AddressID")]
         public Addresses ReceiverAddress { get; set; }
 
     }
