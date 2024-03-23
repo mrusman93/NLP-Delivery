@@ -26,14 +26,20 @@ namespace NLP_Delivery_WebApplication.Controllers
         public async Task<IActionResult> GetAddresses()
         {
             var addresses = await _dataContext.Address.ToListAsync();
-            return Ok(addresses);
+            var addressesGet = _mapper.Map<List<DTOGetAddresses>>(addresses);
+            return Ok(addressesGet);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAddressById(int id)
         {
-            var addresses = await _dataContext.Address.FirstOrDefaultAsync(s => s.AddressID == id);
-            return Ok(addresses);
+            var addresses = await _dataContext.Address.FirstOrDefaultAsync(a => a.AddressID == id);
+
+            if (addresses == null)
+                return NotFound();
+
+            var addressGet = _mapper.Map<DTOGetAddresses>(addresses);
+            return Ok(addressGet);
         }
 
         [HttpPost]
@@ -46,7 +52,7 @@ namespace NLP_Delivery_WebApplication.Controllers
 
             var AddressGet = _mapper.Map<DTOGetAddresses>(domainAddress);
 
-            return CreatedAtAction(nameof(GetAddressById), new { id = domainAddress.AddressID }, AddressGet );
+            return CreatedAtAction(nameof(GetAddressById), new { id = domainAddress.AddressID }, AddressGet);
         }
 
         /*
@@ -70,6 +76,10 @@ namespace NLP_Delivery_WebApplication.Controllers
         public async Task<IActionResult> DeleteAddressByID(int id)
         {
             var Address = await _dataContext.Address.FirstOrDefaultAsync(s => s.AddressID == id);
+
+            if (Address == null)
+                return NotFound();
+            
             _dataContext.Address.Remove(Address);
             await _dataContext.SaveChangesAsync();
 
