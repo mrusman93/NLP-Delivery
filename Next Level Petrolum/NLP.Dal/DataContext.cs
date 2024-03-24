@@ -21,5 +21,16 @@ namespace NLP.Dal
         public DbSet<UserRoles> UsersRole { get; set; }
         public DbSet<ProductReceivers> ProductReceiver { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableDetailedErrors();
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+        }
+
     }
 }

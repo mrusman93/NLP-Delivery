@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -10,22 +11,6 @@ namespace NLP.Dal.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Address",
-                columns: table => new
-                {
-                    AddressID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StreetAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Address", x => x.AddressID);
-                });
-
             migrationBuilder.CreateTable(
                 name: "ProductSize",
                 columns: table => new
@@ -40,16 +25,96 @@ namespace NLP.Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Store",
+                columns: table => new
+                {
+                    StoreID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StoreName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Store", x => x.StoreID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    UserID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmailID = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.UserID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Address",
+                columns: table => new
+                {
+                    AddressID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StreetAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StoreID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Address", x => x.AddressID);
+                    table.ForeignKey(
+                        name: "FK_Address_Store_StoreID",
+                        column: x => x.StoreID,
+                        principalTable: "Store",
+                        principalColumn: "StoreID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Brand",
+                columns: table => new
+                {
+                    BrandID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BrandName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BrandImage = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    StoreID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Brand", x => x.BrandID);
+                    table.ForeignKey(
+                        name: "FK_Brand_Store_StoreID",
+                        column: x => x.StoreID,
+                        principalTable: "Store",
+                        principalColumn: "StoreID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UsersRole",
                 columns: table => new
                 {
-                    RoleID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    RoleID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    UsersUserID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UsersRole", x => x.RoleID);
+                    table.ForeignKey(
+                        name: "FK_UsersRole_User_UsersUserID",
+                        column: x => x.UsersUserID,
+                        principalTable: "User",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -70,69 +135,6 @@ namespace NLP.Dal.Migrations
                         principalTable: "Address",
                         principalColumn: "AddressID",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Store",
-                columns: table => new
-                {
-                    StoreID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StoreName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AddressID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Store", x => x.StoreID);
-                    table.ForeignKey(
-                        name: "FK_Store_Address_AddressID",
-                        column: x => x.AddressID,
-                        principalTable: "Address",
-                        principalColumn: "AddressID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "User",
-                columns: table => new
-                {
-                    UserID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmailID = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_User", x => x.UserID);
-                    table.ForeignKey(
-                        name: "FK_User_UsersRole_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "UsersRole",
-                        principalColumn: "RoleID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Brand",
-                columns: table => new
-                {
-                    BrandID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BrandName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BrandImage = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    StoresStoreID = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Brand", x => x.BrandID);
-                    table.ForeignKey(
-                        name: "FK_Brand_Store_StoresStoreID",
-                        column: x => x.StoresStoreID,
-                        principalTable: "Store",
-                        principalColumn: "StoreID");
                 });
 
             migrationBuilder.CreateTable(
@@ -163,9 +165,14 @@ namespace NLP.Dal.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Brand_StoresStoreID",
+                name: "IX_Address_StoreID",
+                table: "Address",
+                column: "StoreID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Brand_StoreID",
                 table: "Brand",
-                column: "StoresStoreID");
+                column: "StoreID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_BrandID",
@@ -183,14 +190,9 @@ namespace NLP.Dal.Migrations
                 column: "AddressID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Store_AddressID",
-                table: "Store",
-                column: "AddressID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_RoleId",
-                table: "User",
-                column: "RoleId");
+                name: "IX_UsersRole_UsersUserID",
+                table: "UsersRole",
+                column: "UsersUserID");
         }
 
         /// <inheritdoc />
@@ -203,7 +205,7 @@ namespace NLP.Dal.Migrations
                 name: "ProductReceiver");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "UsersRole");
 
             migrationBuilder.DropTable(
                 name: "Brand");
@@ -212,13 +214,13 @@ namespace NLP.Dal.Migrations
                 name: "ProductSize");
 
             migrationBuilder.DropTable(
-                name: "UsersRole");
+                name: "Address");
+
+            migrationBuilder.DropTable(
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Store");
-
-            migrationBuilder.DropTable(
-                name: "Address");
         }
     }
 }

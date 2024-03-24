@@ -15,5 +15,7 @@ namespace NLP.Domain.Models
         public string City { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
+        public int StoreID { get; set; } 
+        public Stores Store { get; set; }
     }
 }

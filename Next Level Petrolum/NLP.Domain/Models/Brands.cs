@@ -12,6 +12,8 @@ namespace NLP.Domain.Models
         [Key]
         public int BrandID { get; set; }
         public string BrandName { get; set; }
-        public Byte[] BrandImage { get; set; }
+        public Byte[] BrandImage { get; set; }        
+        public int StoreID { get; set; }
+        public Stores Store { get; set; }
     }
 }

@@ -12,8 +12,8 @@ using NLP.Dal;
 namespace NLP.Dal.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240322095042_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240323213103_InitialCreate-update")]
+    partial class InitialCreateupdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,9 @@ namespace NLP.Dal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("StoreID")
+                        .HasColumnType("int");
+
                     b.Property<string>("StreetAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -50,6 +53,8 @@ namespace NLP.Dal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AddressID");
+
+                    b.HasIndex("StoreID");
 
                     b.ToTable("Address");
                 });
@@ -70,12 +75,12 @@ namespace NLP.Dal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StoresStoreID")
+                    b.Property<int>("StoreID")
                         .HasColumnType("int");
 
                     b.HasKey("BrandID");
 
-                    b.HasIndex("StoresStoreID");
+                    b.HasIndex("StoreID");
 
                     b.ToTable("Brand");
                 });
@@ -110,11 +115,20 @@ namespace NLP.Dal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SizeID"));
 
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SizeDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SizeName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SizeID");
+
+                    b.HasIndex("ProductID");
 
                     b.ToTable("ProductSize");
                 });
@@ -134,14 +148,9 @@ namespace NLP.Dal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SizeID")
-                        .HasColumnType("int");
-
                     b.HasKey("ProductID");
 
                     b.HasIndex("BrandID");
-
-                    b.HasIndex("SizeID");
 
                     b.ToTable("Product");
                 });
@@ -154,33 +163,34 @@ namespace NLP.Dal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StoreID"));
 
-                    b.Property<int>("AddressID")
-                        .HasColumnType("int");
-
                     b.Property<string>("StoreName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("StoreID");
 
-                    b.HasIndex("AddressID");
-
                     b.ToTable("Store");
                 });
 
             modelBuilder.Entity("NLP.Domain.Models.UserRoles", b =>
                 {
-                    b.Property<int>("RoleID")
+                    b.Property<Guid>("RoleID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleID"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("RoleName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersUserID")
+                        .HasColumnType("int");
+
                     b.HasKey("RoleID");
+
+                    b.HasIndex("UsersUserID");
 
                     b.ToTable("UsersRole");
                 });
@@ -205,25 +215,35 @@ namespace NLP.Dal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserID");
 
-                    b.HasIndex("RoleId");
-
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("NLP.Domain.Models.Addresses", b =>
+                {
+                    b.HasOne("NLP.Domain.Models.Stores", "Store")
+                        .WithMany("Address")
+                        .HasForeignKey("StoreID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("NLP.Domain.Models.Brands", b =>
                 {
-                    b.HasOne("NLP.Domain.Models.Stores", null)
+                    b.HasOne("NLP.Domain.Models.Stores", "Store")
                         .WithMany("Brand")
-                        .HasForeignKey("StoresStoreID");
+                        .HasForeignKey("StoreID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("NLP.Domain.Models.ProductReceivers", b =>
@@ -237,6 +257,17 @@ namespace NLP.Dal.Migrations
                     b.Navigation("ReceiverAddress");
                 });
 
+            modelBuilder.Entity("NLP.Domain.Models.ProductSizes", b =>
+                {
+                    b.HasOne("NLP.Domain.Models.Products", "Product")
+                        .WithMany("Size")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("NLP.Domain.Models.Products", b =>
                 {
                     b.HasOne("NLP.Domain.Models.Brands", "Brand")
@@ -245,42 +276,35 @@ namespace NLP.Dal.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NLP.Domain.Models.ProductSizes", "Size")
-                        .WithMany()
-                        .HasForeignKey("SizeID")
+                    b.Navigation("Brand");
+                });
+
+            modelBuilder.Entity("NLP.Domain.Models.UserRoles", b =>
+                {
+                    b.HasOne("NLP.Domain.Models.Users", "Users")
+                        .WithMany("Role")
+                        .HasForeignKey("UsersUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Brand");
+                    b.Navigation("Users");
+                });
 
+            modelBuilder.Entity("NLP.Domain.Models.Products", b =>
+                {
                     b.Navigation("Size");
                 });
 
             modelBuilder.Entity("NLP.Domain.Models.Stores", b =>
                 {
-                    b.HasOne("NLP.Domain.Models.Addresses", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Address");
+
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("NLP.Domain.Models.Users", b =>
                 {
-                    b.HasOne("NLP.Domain.Models.UserRoles", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("NLP.Domain.Models.Stores", b =>
-                {
-                    b.Navigation("Brand");
                 });
 #pragma warning restore 612, 618
         }

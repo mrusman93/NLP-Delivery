@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using NLP.Domain.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace NLP.Domain.Models
+namespace NLP_Delivery_WebApplication.DTOS.UserDTO
 {
-    public class Users
+    public class CreateUsersDTO
     {
-        [Key]
         public int UserID { get; set; }
 
         public string Username { get; set; }
