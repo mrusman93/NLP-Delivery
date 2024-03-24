@@ -16,9 +16,6 @@ namespace NLP.Dal
         public DbSet<Addresses> Address { get; set; }
         public DbSet<Stores> Store { get; set; }
         public DbSet<Products> Product { get; set; }
-        //public DbSet<ProductDispensing> ProductDispensing { get; set; }
-        public DbSet<Users> User { get; set; }
-        public DbSet<UserRoles> UsersRole { get; set; }
         public DbSet<ProductReceivers> ProductReceiver { get; set; }
 
     }
