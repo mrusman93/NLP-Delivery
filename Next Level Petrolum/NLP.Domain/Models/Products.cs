@@ -16,7 +16,7 @@ namespace NLP.Domain.Models
         public string ProductName { get; set; }
         [ForeignKey("BrandID")]
         public Brands Brand { get; set; }
-        [ForeignKey("SizeID")]
-        public ProductSizes Size { get; set; }
+        
+        public List<ProductSizes> Size { get; set; }
     }
 }

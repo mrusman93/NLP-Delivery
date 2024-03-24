@@ -12,11 +12,8 @@ namespace NLP.Domain.Models
     {
         [Key]
         public int StoreID { get; set; }
-
         public string StoreName { get; set; }
-        [ForeignKey("BrandID")]
-        public Brands Brand { get; set; }
-        [ForeignKey("AddressID")]
-        public Addresses Address { get; set; }
+        public List<Brands> Brand { get; set; }
+        public List<Addresses> Address { get; set; }
     }
 }

@@ -9,8 +9,8 @@ namespace NLP_Delivery_WebApplication.Automapper.Address
     {
         public AddressMappingProfile() 
         {
-            CreateMap<DTOCreateAddresses, Addresses>();
-            CreateMap<Addresses, DTOGetAddresses>();
+            CreateMap<PostPutAddressesDTO, Addresses>();
+            CreateMap<Addresses, GetAddressesDTO>();
         }
     }
 }
