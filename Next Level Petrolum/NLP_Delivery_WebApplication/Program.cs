@@ -1,18 +1,25 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using NLP.Dal;
+using NLP.Domain.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-//Connection String
-//var cs = builder.Configuration.GetConnectionString("Default");
+//Adding Authentication
+builder.Services.AddAuthentication()
+    .AddBearerToken(IdentityConstants.BearerScheme);
 
-//DBContext 
-//builder.Services.AddDbContext<DataContext>(options => { options.UseSqlServer("cs"); });
+//Adding Authorization
+builder.Services.AddAuthorizationBuilder();
 
+builder.Services.AddIdentityCore<Users>()
+    .AddEntityFrameworkStores<AppDataContext>()
+    .AddApiEndpoints();
 
-builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(
+builder.Services.AddDbContext<AppDataContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddAutoMapper(typeof(Program));
@@ -33,6 +40,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapIdentityApi<Users>();
 
 app.UseAuthorization();
 

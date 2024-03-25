@@ -5,7 +5,8 @@ using NLP.Dal;
 using NLP.Domain.Models;
 using NLP_Delivery_WebApplication.DTOS.Addresses;
 using NLP_Delivery_WebApplication.DTOS.StoreDTO;
-
+using static NLP.Dal.AppDataContext;
+/*
 namespace NLP_Delivery_WebApplication.Controllers
 {
     [Route("api/[controller]")]
@@ -123,3 +124,4 @@ namespace NLP_Delivery_WebApplication.Controllers
 
     }
 }
+*/

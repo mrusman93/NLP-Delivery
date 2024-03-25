@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLP.Dal;
 using NLP.Domain.Models;
-using NLP_Delivery_WebApplication.DTOS.UserDTO;
-
+using static NLP.Dal.AppDataContext;
+/*
 namespace NLP_Delivery_WebApplication.Controllers
 {
     [Route("api/[controller]")]
@@ -82,3 +82,4 @@ namespace NLP_Delivery_WebApplication.Controllers
 
     }
 }
+*/

@@ -1,6 +1,6 @@
 ﻿using NLP.Domain.Models;
 using System.ComponentModel.DataAnnotations.Schema;
-
+/*
 namespace NLP_Delivery_WebApplication.DTOS.UserDTO
 {
     public class GetUserDTO
@@ -16,3 +16,4 @@ namespace NLP_Delivery_WebApplication.DTOS.UserDTO
         public List<UserRoles> Role { get; set; }
     }
 }
+*/

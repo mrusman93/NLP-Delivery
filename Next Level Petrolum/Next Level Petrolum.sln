@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLP_Delivery_WebApplication", "NLP_Delivery_WebApplication\NLP_Delivery_WebApplication.csproj", "{6D97947F-536D-48E7-A878-1535CED166E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLP_Delivery_WebApplication", "NLP_Delivery_WebApplication\NLP_Delivery_WebApplication.csproj", "{6D97947F-536D-48E7-A878-1535CED166E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLP.Domain", "NLP.Domain\NLP.Domain.csproj", "{586BEC71-D5BE-4A08-A918-9684B0AB185A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLP.Domain", "NLP.Domain\NLP.Domain.csproj", "{586BEC71-D5BE-4A08-A918-9684B0AB185A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLP.Services", "NLP.Services\NLP.Services.csproj", "{3D884DF5-320F-4F9E-B146-FC0AA1CD32DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLP.Services", "NLP.Services\NLP.Services.csproj", "{3D884DF5-320F-4F9E-B146-FC0AA1CD32DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLP.Dal", "NLP.Dal\NLP.Dal.csproj", "{CFE7FC89-E2F3-4291-ABA7-855FDE119FF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLP.Dal", "NLP.Dal\NLP.Dal.csproj", "{CFE7FC89-E2F3-4291-ABA7-855FDE119FF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
