@@ -83,9 +83,9 @@ namespace NLP_Delivery_WebApplication.Controllers
         }
         
         [HttpGet("{StoreId}/Address")]
-        public async Task<IActionResult> GetAllStoreAddresses(int StoreId)
+        public async Task<IActionResult> GetAllStoreAddresses(int StoreID)
         {
-            var address = await _dataContext.Address.Where(a => a.StoreID == StoreId).ToListAsync();
+            var address = await _dataContext.Address.Where(a => a.AddressID == StoreID).ToListAsync();
             var mappedAddress = _mapper.Map<List<GetAddressesDTO>>(address);
 
             return Ok(mappedAddress);
@@ -121,35 +121,5 @@ namespace NLP_Delivery_WebApplication.Controllers
                 new { StoreId = StoreId, AddressId = mappedAddress.AddressID }, mappedAddress);
         }
 
-        [HttpPut("{StoreId}/Address/{AddressId}")]
-        public async Task<IActionResult> UpdateStoreAddress(int StoreId, int AddressId,
-            [FromBody] PostPutAddressesDTO updatedAddress)
-        {
-            var toUpdate = _mapper.Map<Addresses>(updatedAddress);
-            toUpdate.AddressID = AddressId;
-            toUpdate.StoreID = StoreId;
-
-            _dataContext.Address.Update(toUpdate);
-            await _dataContext.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        [HttpDelete("{StoreId}/Address/{AddressId}")]
-        public async Task<IActionResult> RemoveAddressFromStore(int StoreId, int AddressId)
-        {
-            var address = _dataContext.Address.SingleOrDefaultAsync(a => a.AddressID == AddressId && a.StoreID == StoreId);
-
-            if (address == null) 
-                return NotFound("Address not Found");
-
-            _dataContext.Address.Remove(await address);
-            await _dataContext.SaveChangesAsync();
-
-            return NoContent();
-
-        }
-
-            
     }
 }
