@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLP.Dal;
 using NLP.Domain.Models;
+using NLP_Delivery_WebApplication.Abstractions.Repo;
 using NLP_Delivery_WebApplication.DTOS.Addresses;
 using NLP_Delivery_WebApplication.DTOS.StoreDTO;
 
@@ -12,12 +13,12 @@ namespace NLP_Delivery_WebApplication.Controllers
     [ApiController]
     public class StoresController : ControllerBase
     {
-        //private readonly ILogger<StoresController> _logger;
+        private readonly IStoreRepo _storeRepo;
         private readonly DataContext _dataContext;
         private readonly IMapper _mapper;
-        public StoresController(DataContext dataContext, IMapper mapper) 
+        public StoresController(DataContext dataContext, IMapper mapper, IStoreRepo repo) 
         {
-            //_logger = logger;
+            _storeRepo = repo;
             _dataContext = dataContext;
             _mapper = mapper;
         }
@@ -25,7 +26,7 @@ namespace NLP_Delivery_WebApplication.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllStore()
         {
-            var stores = await _dataContext.Store.ToListAsync();
+            var stores = await _storeRepo.GetAllStoresAsync();
             var storesGet = _mapper.Map<List<GetStoreDTO>>(stores);
 
             return Ok(storesGet);
@@ -34,10 +35,7 @@ namespace NLP_Delivery_WebApplication.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStoreById(int id)
         {
-            var stores = await _dataContext.Store.FirstOrDefaultAsync(s => s.StoreID == id);
-
-            if (stores == null)
-                return NotFound();
+            
             
             var storeGet = _mapper.Map<GetStoreDTO>(stores);
 
@@ -49,8 +47,7 @@ namespace NLP_Delivery_WebApplication.Controllers
         {
             var domainStore = _mapper.Map<Stores>(store);
 
-            _dataContext.Store.Add(domainStore);
-            await _dataContext.SaveChangesAsync();
+            
 
             var storeGet = _mapper.Map<GetStoreDTO>(domainStore);
 
@@ -62,8 +59,7 @@ namespace NLP_Delivery_WebApplication.Controllers
         {
             var toupdate = _mapper.Map<Stores>(updated);
 
-            _dataContext.Store.Update(toupdate);
-            await _dataContext.SaveChangesAsync();
+            
 
             return NoContent();
         }
@@ -71,21 +67,14 @@ namespace NLP_Delivery_WebApplication.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStoreByID(int id) 
         {
-            var store = await _dataContext.Store.FirstOrDefaultAsync(s => s.StoreID == id);
-
-            if (store == null)
-                return NotFound();
             
-            _dataContext.Store.Remove(store);
-            await _dataContext.SaveChangesAsync();
-
             return NoContent();
         }
         
         [HttpGet("{StoreId}/Address")]
         public async Task<IActionResult> GetAllStoreAddresses(int StoreId)
         {
-            var address = await _dataContext.Address.Where(a => a.StoreID == StoreId).ToListAsync();
+            
             var mappedAddress = _mapper.Map<List<GetAddressesDTO>>(address);
 
             return Ok(mappedAddress);
@@ -94,10 +83,7 @@ namespace NLP_Delivery_WebApplication.Controllers
         [HttpGet("{StoreId}/Address/{AddressId}")]
         public async Task<IActionResult> GetStoreAddressById(int AddressId, int StoreId)
         {
-            var address = await _dataContext.Address.FirstOrDefaultAsync(a => a.AddressID == AddressId && a.StoreID == StoreId);
-
-            if (address == null)
-                return NotFound("Address not Found");
+            
 
             var mappedaddress = _mapper.Map<GetAddressesDTO>(address);
 
@@ -109,12 +95,7 @@ namespace NLP_Delivery_WebApplication.Controllers
         {
             var address = _mapper.Map<Addresses>(newAddress);
 
-            var store = await _dataContext.Store.Include(s => s.Address)
-                .FirstOrDefaultAsync(s => s.StoreID == StoreId);
-
-            store.Address.Add(address);
-
-            await _dataContext.SaveChangesAsync();
+            
 
             var mappedAddress = _mapper.Map<GetAddressesDTO>(address);
             return CreatedAtAction(nameof(GetStoreAddressById),
@@ -130,8 +111,7 @@ namespace NLP_Delivery_WebApplication.Controllers
             toUpdate.StoreID = StoreId;
             toUpdate.AddressID = AddressId;
 
-            _dataContext.Address.Update(toUpdate);
-            await _dataContext.SaveChangesAsync();
+            
 
             return NoContent();
         }
@@ -139,13 +119,7 @@ namespace NLP_Delivery_WebApplication.Controllers
         [HttpDelete("{StoreId}/Address/{AddressId}")]
         public async Task<IActionResult> RemoveAddressFromStore(int StoreId, int AddressId)
         {
-            var address = await _dataContext.Address.SingleOrDefaultAsync(a => a.AddressID == AddressId && a.StoreID == StoreId);
-
-            if (address == null)
-                return NotFound("address not found");
-
-            _dataContext.Address.Remove(address);
-            await _dataContext.SaveChangesAsync();
+            
 
             return NoContent();
         }

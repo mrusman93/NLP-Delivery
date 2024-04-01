@@ -1,11 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NLP.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NLP.Dal
 {
@@ -21,16 +15,18 @@ namespace NLP.Dal
         public DbSet<UserRoles> UsersRole { get; set; }
         public DbSet<ProductReceivers> ProductReceiver { get; set; }
 
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.EnableDetailedErrors();
             optionsBuilder.EnableSensitiveDataLogging();
         }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
         }
-
+        
     }
 }
